@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
 import os
@@ -6,90 +6,207 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# File for storing records
 DATA_FILE = "records.json"
 
-# Initialize empty records if the file does not exist
-if not os.path.exists(DATA_FILE):
-    with open(DATA_FILE, "w") as f:
-        json.dump({"clients": [], "airlines": [], "flights": []}, f)
 
+# ------------------ Utilities ------------------ #
 
-# Load records from JSON file
 def load_records():
-    with open(DATA_FILE, "r") as file:
-        return json.load(file)
+    """Load the records from the JSON file."""
+    if not os.path.exists(DATA_FILE):
+        # If file doesn't exist, create basic template
+        with open(DATA_FILE, "w") as f:
+            json.dump({"clients": [], "airlines": [], "flights": []}, f)
+
+    with open(DATA_FILE, "r", encoding="utf-8") as f:
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return {"clients": [], "airlines": [], "flights": []}
 
 
-# Save records to JSON file
 def save_records(data):
-    with open(DATA_FILE, "w") as file:
-        json.dump(data, file, indent=4)
+    """Save the updated records to the JSON file."""
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
 
 
-# Create a new record
-@app.route("/add", methods=["POST"])
-def add_record():
-    data = request.json
+# ------------------ CLIENT ROUTES ------------------ #
+@app.route("/clients", methods=["GET"])
+def get_clients():
+    """Return the list of all client records."""
+    data = load_records()
+    return jsonify(data["clients"])
+
+@app.route("/clients/<int:client_id>", methods=["GET"])
+def get_client(client_id):
+    """Get a single client by ID."""
+    data = load_records()
+    for client in data["clients"]:
+        if client["ID"] == client_id:
+            return jsonify(client)
+    return jsonify({"message": "Client not found"}), 404
+
+@app.route("/clients", methods=["POST"])
+def create_client():
+    """Add a new client record."""
     records = load_records()
+    new_client = request.json
 
-    record_type = data.get("Type")
-
-    if record_type == "Client":
-        data["ID"] = len(records["clients"]) + 1
-        records["clients"].append(data)
-    elif record_type == "Airline":
-        data["ID"] = len(records["airlines"]) + 1
-        records["airlines"].append(data)
-    elif record_type == "Flight":
-        records["flights"].append(data)
+    # Generate a simple auto-incremental ID
+    new_client["ID"] = len(records["clients"]) + 1
+    new_client["Type"] = "Client"
+    records["clients"].append(new_client)
 
     save_records(records)
-    return jsonify({"message": "Record added successfully"}), 201
+    return jsonify({"message": "Client created", "data": new_client}), 201
 
-
-# Get all records
-@app.route("/records", methods=["GET"])
-def get_records():
-    return jsonify(load_records())
-
-
-# Search for a record by ID
-@app.route("/search/<record_type>/<int:id>", methods=["GET"])
-def search_record(record_type, id):
+@app.route("/clients/<int:client_id>", methods=["PUT"])
+def update_client(client_id):
+    """Update a client record by ID."""
     records = load_records()
-    result = [rec for rec in records.get(record_type, []) if rec.get("ID") == id]
-
-    if result:
-        return jsonify(result[0])
-    else:
-        return jsonify({"message": "Record not found"}), 404
-
-
-# Update a record
-@app.route("/update/<record_type>/<int:id>", methods=["PUT"])
-def update_record(record_type, id):
-    records = load_records()
-    new_data = request.json
-
-    for record in records[record_type]:
-        if record["ID"] == id:
-            record.update(new_data)
+    updated = request.json
+    for client in records["clients"]:
+        if client["ID"] == client_id:
+            client.update(updated)
             save_records(records)
-            return jsonify({"message": "Record updated successfully"})
+            return jsonify({"message": "Client updated", "data": client})
 
-    return jsonify({"message": "Record not found"}), 404
+    return jsonify({"message": "Client not found"}), 404
 
-
-# Delete a record
-@app.route("/delete/<record_type>/<int:id>", methods=["DELETE"])
-def delete_record(record_type, id):
+@app.route("/clients/<int:client_id>", methods=["DELETE"])
+def delete_client(client_id):
+    """Delete a client record and any associated flights."""
     records = load_records()
-    records[record_type] = [rec for rec in records[record_type] if rec["ID"] != id]
+    original_len = len(records["clients"])
+    records["clients"] = [c for c in records["clients"] if c["ID"] != client_id]
+    # Also remove flights associated with the deleted client
+    records["flights"] = [f for f in records["flights"] if f["Client_ID"] != client_id]
+
+    if len(records["clients"]) < original_len:
+        save_records(records)
+        return jsonify({"message": f"Client {client_id} deleted"})
+    else:
+        return jsonify({"message": "Client not found"}), 404
+
+
+# ------------------ AIRLINE ROUTES ------------------ #
+@app.route("/airlines", methods=["GET"])
+def get_airlines():
+    """Get all airline records."""
+    data = load_records()
+    return jsonify(data["airlines"])
+
+@app.route("/airlines", methods=["POST"])
+def create_airline():
+    """Add a new airline."""
+    records = load_records()
+    new_airline = request.json
+
+    new_airline["ID"] = len(records["airlines"]) + 1
+    new_airline["Type"] = "Airline"
+    records["airlines"].append(new_airline)
 
     save_records(records)
-    return jsonify({"message": "Record deleted successfully"})
+    return jsonify({"message": "Airline created", "data": new_airline}), 201
 
+@app.route("/airlines/<int:airline_id>", methods=["PUT"])
+def update_airline(airline_id):
+    """Update an airline by ID."""
+    records = load_records()
+    updated = request.json
+    for airline in records["airlines"]:
+        if airline["ID"] == airline_id:
+            airline.update(updated)
+            save_records(records)
+            return jsonify({"message": "Airline updated", "data": airline})
+    return jsonify({"message": "Airline not found"}), 404
+
+@app.route("/airlines/<int:airline_id>", methods=["DELETE"])
+def delete_airline(airline_id):
+    """Delete an airline record and any associated flights."""
+    records = load_records()
+    original_len = len(records["airlines"])
+    records["airlines"] = [a for a in records["airlines"] if a["ID"] != airline_id]
+    # Remove flights associated with this airline
+    records["flights"] = [f for f in records["flights"] if f["Airline_ID"] != airline_id]
+
+    if len(records["airlines"]) < original_len:
+        save_records(records)
+        return jsonify({"message": f"Airline {airline_id} deleted"})
+    else:
+        return jsonify({"message": "Airline not found"}), 404
+
+
+# ------------------ FLIGHT ROUTES ------------------ #
+@app.route("/flights", methods=["GET"])
+def get_flights():
+    """Get all flights."""
+    data = load_records()
+    return jsonify(data["flights"])
+
+@app.route("/flights", methods=["POST"])
+def create_flight():
+    """Add a new flight."""
+    records = load_records()
+    new_flight = request.json
+
+    # Basic validation: ensure Client_ID, Airline_ID exist
+    if not any(c["ID"] == new_flight["Client_ID"] for c in records["clients"]):
+        return jsonify({"message": "Invalid Client_ID"}), 400
+
+    if not any(a["ID"] == new_flight["Airline_ID"] for a in records["airlines"]):
+        return jsonify({"message": "Invalid Airline_ID"}), 400
+
+    new_flight.setdefault("Type", "Flight")
+    records["flights"].append(new_flight)
+    save_records(records)
+    return jsonify({"message": "Flight created", "data": new_flight}), 201
+
+@app.route("/flights/<int:client_id>/<int:airline_id>", methods=["DELETE"])
+def delete_flight(client_id, airline_id):
+    """Delete a flight by Client_ID and Airline_ID."""
+    records = load_records()
+    original_len = len(records["flights"])
+    records["flights"] = [
+        f for f in records["flights"]
+        if not (f["Client_ID"] == client_id and f["Airline_ID"] == airline_id)
+    ]
+
+    if len(records["flights"]) < original_len:
+        save_records(records)
+        return jsonify({"message": f"Flight {client_id}-{airline_id} deleted"})
+    else:
+        return jsonify({"message": "Flight not found"}), 404
+
+
+# ------------------ SEARCH EXAMPLE (ANY RECORD) ------------------ #
+@app.route("/search", methods=["GET"])
+def search_records():
+    """
+    A generic search that checks 'Name', 'Company Name', 'Start City', 'End City', etc.
+    Example usage: /search?q=alice
+    """
+    query = request.args.get("q", "").lower()
+    data = load_records()
+    matching_clients = [
+        c for c in data["clients"]
+        if query in c["Name"].lower() or query in c["City"].lower()
+    ]
+    matching_airlines = [
+        a for a in data["airlines"]
+        if query in a["Company Name"].lower()
+    ]
+    matching_flights = [
+        f for f in data["flights"]
+        if query in f["Start City"].lower() or query in f["End City"].lower()
+    ]
+    results = {
+        "clients": matching_clients,
+        "airlines": matching_airlines,
+        "flights": matching_flights
+    }
+    return jsonify(results)
 
 if __name__ == "__main__":
     app.run(debug=True)
