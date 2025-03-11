@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Clients from "./Clients";
 import Airlines from "./Airlines";
 import Flights from "./Flights";
+import './App.css';
 
 function App() {
   return (
     <Router>
-      <div>
+      <div id='main'>
         <h2>Record Management System</h2>
         <nav>
           <ul>

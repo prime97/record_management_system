@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+
+#main {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 10vh;
+  min-width: 10vh;
+  border: 2px solid black; /* Blue dashed border */
+  border-radius: 15px; 
+  padding: 20px;
+}
+
+#main nav ul {
+    list-style-type: none; /* Remove bullet points from list */
+    padding: 0;
+    display: flex; /* make nav items appear horizontally */
+}
+
+#main nav ul li {
+    margin: 0 20px; /* add some space between nav items */
+}
