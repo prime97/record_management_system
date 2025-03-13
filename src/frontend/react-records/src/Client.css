@@ -1,8 +1,0 @@
-/* In your CSS file (e.g., app.css or a component-specific CSS file) */
-
-form input,
-form button {
-  display: block; /* Make each element a block-level element */
-  width: 100%; /* Optional: Make them take up the full width of their container */
-  margin-bottom: 10px; /* Optional: Add some space between elements */
-}
