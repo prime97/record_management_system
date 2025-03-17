@@ -4,7 +4,7 @@
 
 }
 
-h2,h3{
+h1,h3{
   color:black
 }
 
@@ -50,14 +50,10 @@ h2,h3{
 
 #main {
   display: flex;
-  flex-wrap: nowrap;
+  /* flex-wrap: nowrap; */
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  min-height: 10vh;
-  min-width: 10vh;
-  border: 2px solid black; /* Blue dashed border */
-  border-radius: 15px; 
   padding: 20px;
 }
 
@@ -72,10 +68,12 @@ h2,h3{
   }
 
 
-form input,
+form,
 form button {
-  display: block; /* Make each element a block-level element */
+  display: inline-block; /* Make each element a block-level element */
   width: 100%; /* Optional: Make them take up the full width of their container */
-  margin-bottom: 10px; /* Optional: Add some space between elements */
-  color:rgb(118,118,118)
+  margin:0 auto; /* Optional: Add some space between elements */
+  color:rgb(118,118,118);
+  
 }
+
