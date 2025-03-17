@@ -71,7 +71,7 @@ function Clients() {
         {clients.map((client) => (
           <li key={client.id}>
             {client.name} - {client.city}
-            <Button variant="contained" onClick={() => handleDelete(client.id)}>Delete</Button>
+            <Button color="error" variant="contained" onClick={() => handleDelete(client.id)}>Delete</Button>
           </li>
         ))}
       </ul>

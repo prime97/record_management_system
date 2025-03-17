@@ -1,26 +1,5 @@
 {
     "clients": [],
-    "airlines": [
-        {
-            "type": "Airline",
-            "id": 1,
-            "company_name": "This is a test airline"
-        },
-        {
-            "type": "Airline",
-            "id": 2,
-            "company_name": "British Airway"
-        },
-        {
-            "type": "Airline",
-            "id": 3,
-            "company_name": "ANA"
-        },
-        {
-            "type": "Airline",
-            "id": 4,
-            "company_name": "Singapore Airline"
-        }
-    ],
+    "airlines": [],
     "flights": []
 }

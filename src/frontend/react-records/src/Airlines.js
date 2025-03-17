@@ -42,7 +42,7 @@ function Airlines() {
         {airlines.map((airline) => (
           <li key={airline.id}>
             {airline.company_name}
-            <Button onClick={() => handleDelete(airline.id)}>Delete</Button>
+            <Button color="error" onClick={() => handleDelete(airline.id)}>Delete</Button>
           </li>
         ))}
       </ul>

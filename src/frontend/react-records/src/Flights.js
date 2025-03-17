@@ -62,7 +62,7 @@ function Flights() {
         {flights.map((flight) => (
           <li key={flight.id}>
             Client {flight.client_id} → Airline {flight.airline_id}
-            <Button onClick={() => handleDelete(flight.id)}>Delete</Button>
+            <Button color="error" onClick={() => handleDelete(flight.id)}>Delete</Button>
           </li>
         ))}
       </ul>

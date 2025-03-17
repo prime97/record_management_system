@@ -36,14 +36,14 @@ function App() {
             margin="normal" // Add some spacing around the TextField
           />
 
-          <nav>
+          <nav id="buttons">
             {/* <ul> */}
               {/* <ButtonGroup id='btn_group' variant="contained" aria-label="Basic button group"> */}
                 {/* Use Link components *inside* the Buttons */}
                 <Stack direction="row" spacing={2}>
-                <Button variant='contained'component={Link} to="/clients">Clients</Button>
-                <Button variant='contained'component={Link} to="/airlines">Airlines</Button>
-                <Button variant='contained'component={Link} to="/flights">Flights</Button>
+                <Button size="small" variant ='contained'component={Link} to="/clients">Clients</Button>
+                <Button size="small" variant='contained'component={Link} to="/airlines">Airlines</Button>
+                <Button size="small" variant='contained'component={Link} to="/flights">Flights</Button>
               {/* </ButtonGroup> */}
               </Stack>
             {/* </ul> */}
