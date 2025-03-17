@@ -44,11 +44,19 @@ function Clients() {
 
   return (
 
-    <div id="client">
+    <div id="input-field">
       <h3>Clients</h3>
      
-      <form onSubmit={handleSubmit}>
-        <TextField variant="standard" type="text" name="name" placeholder="Name" onChange={handleChange} required />
+      <form onSubmit={handleSubmit}   style={{
+                    width: '80%',
+                    maxWidth: '400px', // Good for responsiveness
+                    display: 'flex',        // Make the form a flex container
+                    flexDirection: 'column', // Stack items vertically
+                    alignItems: 'center',   // Center items horizontally
+                    margin: '0 auto', 
+                    gap:'7px'
+                }}>
+        <TextField variant="standard" type="text" name="name" placeholder="Name"  onChange={handleChange} required />
         <TextField variant="standard" type="text" name="address_line_1" placeholder="Address Line 1" onChange={handleChange} required />
         <TextField variant="standard" type="text" name="address_line_2" placeholder="Address Line 2" onChange={handleChange} />
         <TextField variant="standard" type="text" name="address_line_3" placeholder="Address Line 3" onChange={handleChange} />

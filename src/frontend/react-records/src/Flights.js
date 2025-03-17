@@ -40,9 +40,17 @@ function Flights() {
 
 
   return (
-    <div>
+    <div id='input-field'>
       <h3>Flights</h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{
+                    width: '80%',
+                    maxWidth: '400px', // Good for responsiveness
+                    display: 'flex',        // Make the form a flex container
+                    flexDirection: 'column', // Stack items vertically
+                    alignItems: 'center',   // Center items horizontally
+                    margin: '0 auto', 
+                    gap:'7px'
+                }}>
         <TextField  variant="standard" type="number" name="client_id" placeholder="Client ID" onChange={handleChange} required />
         <TextField  variant="standard" type="number" name="airline_id" placeholder="Airline ID" onChange={handleChange} required />
         <TextField  variant="standard" type="date" name="date" onChange={handleChange} required />

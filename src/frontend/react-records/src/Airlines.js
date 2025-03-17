@@ -32,7 +32,7 @@ function Airlines() {
   };
 
   return (
-    <div>
+    <div id='input-field'>
       <h3>Airlines</h3>
       <form onSubmit={handleSubmit}>
         <TextField variant="standard" type="text" name="company_name" placeholder="Company Name" onChange={handleChange} required />
