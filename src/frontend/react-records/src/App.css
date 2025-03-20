@@ -1,3 +1,13 @@
+*{
+  font-family: 'Roboto';
+  color:white;
+
+}
+
+h1,h3{
+  color:black
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +45,44 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+#main {
+  display: flex;
+  /* flex-wrap: nowrap; */
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  /* padding: 20px; */
+}
+
+#main nav ul {
+    list-style-type: none; /* Remove bullet points from list */
+    padding: 0;
+    display: flex; /* make nav items appear horizontally */
+}
+
+#main nav ul li {
+      margin: 0 20px; /* add some space between nav items */
+  }
+
+
+  #input-field {
+    display: inline-block; /* Make each element a block-level element */
+    width: 100%; /* Optional: Make them take up the full width of their container */
+    margin:0 auto; /* Optional: Add some space between elements */
+    color:rgb(118,118,118);
+    text-align: center;
+  }
+
+
+li{
+  color: black;
+  list-style: none;
+  text-align: center;
+}
+
+#buttons{
+  margin-top: 10px;
 }

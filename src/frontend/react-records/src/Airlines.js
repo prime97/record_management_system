@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {Button,TextField} from "@mui/material";
+import "./App.css";
 
 function Airlines() {
   const [airlines, setAirlines] = useState([]);
@@ -30,17 +32,17 @@ function Airlines() {
   };
 
   return (
-    <div>
+    <div id='input-field'>
       <h3>Airlines</h3>
       <form onSubmit={handleSubmit}>
-        <input type="text" name="company_name" placeholder="Company Name" onChange={handleChange} required />
-        <button type="submit">Add Airline</button>
+        <TextField variant="standard" type="text" name="company_name" placeholder="Company Name" onChange={handleChange} required />
+        <Button variant="text" type="submit">Add Airline</Button>
       </form>
       <ul>
         {airlines.map((airline) => (
           <li key={airline.id}>
             {airline.company_name}
-            <button onClick={() => handleDelete(airline.id)}>Delete</button>
+            <Button color="error" onClick={() => handleDelete(airline.id)}>Delete</Button>
           </li>
         ))}
       </ul>

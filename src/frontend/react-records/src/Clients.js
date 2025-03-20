@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {Button,TextField,Box} from "@mui/material";
+import "./App.css";
+// import './Client.css';
 
 function Clients() {
   const [clients, setClients] = useState([]);
@@ -40,25 +43,35 @@ function Clients() {
   };
 
   return (
-    <div>
+
+    <div id="input-field">
       <h3>Clients</h3>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
-        <input type="text" name="address_line_1" placeholder="Address Line 1" onChange={handleChange} required />
-        <input type="text" name="address_line_2" placeholder="Address Line 2" onChange={handleChange} />
-        <input type="text" name="address_line_3" placeholder="Address Line 3" onChange={handleChange} />
-        <input type="text" name="city" placeholder="City" onChange={handleChange} required />
-        <input type="text" name="state" placeholder="State" onChange={handleChange} required />
-        <input type="text" name="zip_code" placeholder="Zip Code" onChange={handleChange} required />
-        <input type="text" name="country" placeholder="Country" onChange={handleChange} required />
-        <input type="text" name="phone_number" placeholder="Phone Number" onChange={handleChange} required />
-        <button type="submit">Add Client</button>
+     
+      <form onSubmit={handleSubmit}   style={{
+                    width: '80%',
+                    maxWidth: '400px', // Good for responsiveness
+                    display: 'flex',        // Make the form a flex container
+                    flexDirection: 'column', // Stack items vertically
+                    alignItems: 'center',   // Center items horizontally
+                    margin: '0 auto', 
+                    gap:'7px'
+                }}>
+        <TextField variant="standard" type="text" name="name" placeholder="Name"  onChange={handleChange} required />
+        <TextField variant="standard" type="text" name="address_line_1" placeholder="Address Line 1" onChange={handleChange} required />
+        <TextField variant="standard" type="text" name="address_line_2" placeholder="Address Line 2" onChange={handleChange} />
+        <TextField variant="standard" type="text" name="address_line_3" placeholder="Address Line 3" onChange={handleChange} />
+        <TextField variant="standard" type="text" name="city" placeholder="City" onChange={handleChange} required />
+        <TextField variant="standard" type="text" name="state" placeholder="State" onChange={handleChange} required />
+        <TextField variant="standard" type="text" name="zip_code" placeholder="Zip Code" onChange={handleChange} required />
+        <TextField variant="standard" type="text" name="country" placeholder="Country" onChange={handleChange} required />
+        <TextField variant="standard" type="text" name="phone_number" placeholder="Phone Number" onChange={handleChange} required />
+        <Button variant="text" type="submit">Add Client</Button>
       </form>
       <ul>
         {clients.map((client) => (
           <li key={client.id}>
             {client.name} - {client.city}
-            <button onClick={() => handleDelete(client.id)}>Delete</button>
+            <Button color="error" variant="contained" onClick={() => handleDelete(client.id)}>Delete</Button>
           </li>
         ))}
       </ul>
