@@ -42,6 +42,11 @@ class RecordAppTestCase(unittest.TestCase):
         response = self.client.delete("/clients/2")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json["message"], "Client deleted successfully")
+
+    def test_update_client(self):
+        response = self.client.put("/clients/1", data=json.dumps({"name": "John Smith", "address_line_1": "456 Other Street", "city": "Manchester", "state": "Manchester", "zip_code": "MO0123", "country": "UK", "phone_number": "9876543210"}), content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json["message"], "Client updated successfully")
     
     # ===== AIRLINE TESTS =====
 
@@ -61,6 +66,11 @@ class RecordAppTestCase(unittest.TestCase):
         response = self.client.delete("/airlines/2")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json["message"], "Airline deleted successfully")
+
+    def test_update_airlines(self):
+        response = self.client.put("/airlines/1", data=json.dumps({"company_name": "Wizz Air"}), content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json["message"], "Airline updated successfully")
     
     # ===== FLIGHT TESTS =====
     def test_add_flights(self):
@@ -79,6 +89,11 @@ class RecordAppTestCase(unittest.TestCase):
         response = self.client.delete("/flights/2")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json["message"], "Flight deleted successfully")
+
+    def test_update_flights(self):
+        response = self.client.put("/flights/1", data=json.dumps({"client_id": 1, "airline_id": 1, "date": "2026-06-12", "start_city": "Berlin", "end_city": "Rome"}), content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json["message"], "Flight updated successfully")
 
 if __name__ == "__main__":
     unittest.main()
