@@ -1,5 +1,11 @@
 {
     "clients": [],
-    "airlines": [],
+    "airlines": [
+        {
+            "type": "Airline",
+            "id": 1,
+            "company_name": "test"
+        }
+    ],
     "flights": []
 }

@@ -67,14 +67,14 @@ function Clients() {
         <TextField variant="standard" type="text" name="phone_number" placeholder="Phone Number" onChange={handleChange} required />
         <Button variant="text" type="submit">Add Client</Button>
       </form>
-      <ul>
+      {/* <ul>
         {clients.map((client) => (
           <li key={client.id}>
             {client.name} - {client.city}
             <Button color="error" variant="contained" onClick={() => handleDelete(client.id)}>Delete</Button>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }

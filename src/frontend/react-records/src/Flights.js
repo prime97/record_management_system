@@ -58,14 +58,14 @@ function Flights() {
         <TextField  variant="standard" type="text" name="end_city" placeholder="End City" onChange={handleChange} required />
         <Button variant="text" type="submit">Add Flight</Button>
       </form>
-      <ul>
+      {/* <ul>
         {flights.map((flight) => (
           <li key={flight.id}>
             Client {flight.client_id} → Airline {flight.airline_id}
             <Button color="error" onClick={() => handleDelete(flight.id)}>Delete</Button>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }
