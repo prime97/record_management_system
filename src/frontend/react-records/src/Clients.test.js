@@ -68,6 +68,22 @@ describe("Clients Component", () => {
     expect(axios.post).toHaveBeenCalledWith("http://localhost:5000/clients", expect.objectContaining({ name: "Jane Smith", address_line_1: "Place", city: "New York", state: "New York", zip_code: "NY123", country: "America", phone_number: "12345678" }));
   });
 
+  test("edits a client", async () => {
+    axios.get.mockResolvedValue({ data: [{ id: 3, name: "Jordan Simmons", address_line_1: "34 New Place", city: "Dallas", state: "Texas", zip_code: "TX123", country: "America", phone_number: "987654321" }] });
+    axios.put.mockResolvedValue({});
+    render(<Clients />);
+  
+    await waitFor(() => expect(screen.getByText("Jordan Simmons - Dallas")).toBeInTheDocument());
+    fireEvent.click(screen.getByText("Edit"));
+    fireEvent.change(screen.getByPlaceholderText("Name"), { target: { value: "Winona Davies" } });
+      
+    await act(async () => {
+      fireEvent.click(screen.getByText("Update"));
+    });
+      
+    await waitFor(() => expect(axios.put).toHaveBeenCalledTimes(1));
+  });
+
   test("deletes a client", async () => {
     axios.get.mockResolvedValue({ data: [{ id: 1, name: "John Doe", address_line_1: "Place", city: "New York", state: "New York", zip_code: "NY123", country: "America", phone_number: "12345678" }] });
     axios.delete.mockResolvedValue({});
