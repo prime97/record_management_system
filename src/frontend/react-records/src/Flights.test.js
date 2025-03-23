@@ -49,6 +49,10 @@ describe("Flights Component", () => {
         data: [{ id: 2, client_id: 303, airline_id: 404, date: "2025-05-01", start_city: "Paris", end_city: "Berlin" }]
     });
 
+    await act(async () => {
+      render(<Flights />);
+    });
+    
     await waitFor(() => {
       expect(screen.getByText("Client 303 → Airline 404")).toBeInTheDocument();
     });
