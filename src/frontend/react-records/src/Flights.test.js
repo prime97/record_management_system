@@ -59,7 +59,23 @@ describe("Flights Component", () => {
 
     expect(axios.post).toHaveBeenCalledWith("http://localhost:5000/flights", expect.objectContaining({ client_id: "303", airline_id: "404", start_city: "Paris", end_city: "Berlin", date: "2025-05-01" }));
   });
+  
+  test("edits a flight", async () => {
+    axios.get.mockResolvedValue({ data: [{ id: 3, client_id: "111", airline_id: "222", date: "2025-08-10", start_city: "Dublin", end_city: "London" }] });
+    axios.put.mockResolvedValue({});
+    render(<Flights />);
 
+    await waitFor(() => expect(screen.getByText("Client 111 → Airline 222")).toBeInTheDocument());
+    fireEvent.click(screen.getByText("Edit"));
+    fireEvent.change(screen.getByPlaceholderText("Start City"), { target: { value: "Barcelona" } });
+    
+    await act(async () => {
+      fireEvent.click(screen.getByText("Update"));
+    });
+    
+    await waitFor(() => expect(axios.put).toHaveBeenCalledTimes(1));
+  });
+  
   test("deletes a flight", async () => {
     axios.get.mockResolvedValue({
       data: [{ id: 1, client_id: 101, airline_id: 202, date: "2025-05-01", start_city: "London", end_city: "New York" }]
