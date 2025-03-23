@@ -1,25 +1,25 @@
-#### Running and opening Record management system
+# Running and opening Record management system
 
-# Step 1 - run backend app
+### Step 1 - run backend app
 
 Run record_app.py
 
-# Step 2 - Change to correct Directory
+### Step 2 - Change to correct Directory
 
 cd .\src\frontend\react-records
 
-# Step 3 - install dependencies
+### Step 3 - install dependencies
 
 npm install
 
-# Step 4 - run the app
+### Step 4 - run the app
 
 npm start
 
 
-#### Testing
+# Testing
 
-### NOTE: Remove any records before running tests
+## NOTE: REMOVE ANY EXISTING RECORDS BEFORE RUNNING TESTS
 
 ## Backend
 
@@ -29,10 +29,10 @@ python src/backend/unit_tests.py
 
 ## Frontend
 
-# Step 1 - Change to correct Directory
+### Step 1 - Change to correct Directory
 
 cd .\src\frontend\react-records
 
-# Step 2 - Run tests for Clients, Airlines & Flights
+### Step 2 - Run tests for Clients, Airlines & Flights
 
 npx jest src/frontend/react-records/src
