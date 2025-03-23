@@ -102,7 +102,7 @@ function Flights() {
       }}>
         <TextField value={formData.client_id} variant="standard" type="number" name="client_id" placeholder="Client ID" onChange={handleChange} required />
         <TextField value={formData.airline_id} variant="standard" type="number" name="airline_id" placeholder="Airline ID" onChange={handleChange} required />
-        <TextField value={formData.date} variant="standard" type="date" name="date" onChange={handleChange} required />
+        <TextField value={formData.date} variant="standard" type="date" name="date" onChange={handleChange} required inputRef={(input) => input && input.setAttribute("data-testid", "date-input")} />
         <TextField value={formData.start_city} variant="standard" type="text" name="start_city" placeholder="Start City" onChange={handleChange} required />
         <TextField value={formData.end_city} variant="standard" type="text" name="end_city" placeholder="End City" onChange={handleChange} required />
       <Button variant="text" type="submit">
