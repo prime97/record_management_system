@@ -19,11 +19,11 @@ npm start
 
 # Testing
 
-## NOTE: REMOVE ANY EXISTING RECORDS BEFORE RUNNING TESTS
+### NOTE: REMOVE ANY EXISTING RECORDS BEFORE RUNNING TESTS
 
 ## Backend
 
-# Run tests for backend
+### Run tests for backend
 
 python src/backend/unit_tests.py
 
