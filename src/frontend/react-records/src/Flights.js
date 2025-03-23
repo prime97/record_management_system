@@ -106,7 +106,7 @@ function Flights() {
         <TextField value={formData.start_city} variant="standard" type="text" name="start_city" placeholder="Start City" onChange={handleChange} required />
         <TextField value={formData.end_city} variant="standard" type="text" name="end_city" placeholder="End City" onChange={handleChange} required />
       <Button variant="text" type="submit">
-        {editingId ? "Update" : "Add Airline"}
+        {editingId ? "Update" : "Add Flight"}
       </Button>
       {editingId && (
         <Button onClick={() => { setEditingId(null); setFormData({ client_id: "" , airline_id:"",date:"",start_city:"",end_city:""}); }}>
