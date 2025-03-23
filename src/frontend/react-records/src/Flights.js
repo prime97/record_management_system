@@ -64,6 +64,8 @@ function Flights() {
         });
         setSuccessMessage(`Flight from ${start_city} to ${end_city} on ${date} added`);
       }
+      fetchFlights();
+      setFormData({ client_id: "" , airline_id:"",date:"",start_city:"",end_city:""})
       setTimeout(() => {
         setSuccessMessage("");
       }, 3000);

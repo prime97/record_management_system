@@ -91,14 +91,6 @@
     "flights": [
         {
             "date": "2025-03-25",
-            "id": 1,
-            "end_city": "Londonn",
-            "client_id": 1,
-            "airline_id": 1,
-            "start_city": "Tokyo"
-        },
-        {
-            "date": "2025-03-25",
             "id": 2,
             "end_city": "London",
             "client_id": 1,
@@ -128,6 +120,22 @@
             "client_id": 19,
             "airline_id": 9,
             "start_city": "Tokyo"
+        },
+        {
+            "date": "2025-03-25",
+            "id": 6,
+            "end_city": "Londonn",
+            "client_id": 1,
+            "airline_id": 11,
+            "start_city": "Tokyo"
+        },
+        {
+            "date": "2025-03-05",
+            "id": 7,
+            "end_city": "vmm",
+            "client_id": 988,
+            "airline_id": 888,
+            "start_city": "a"
         }
     ]
 }
