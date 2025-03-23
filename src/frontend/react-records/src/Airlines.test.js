@@ -48,6 +48,20 @@ describe("Airlines Component", () => {
     expect(axios.post).toHaveBeenCalledWith("http://localhost:5000/airlines", { company_name: "JetBlue" });
   });
 
+  test("edits an airline", async () => {
+    axios.get.mockResolvedValue({ data: [{ id: 3, company_name: "Wizz Air" }] });
+    axios.put.mockResolvedValue({});
+    render(<Airlines />);
+
+    await waitFor(() => expect(screen.getByText("Wizz Air")).toBeInTheDocument());
+    fireEvent.click(screen.getByText("Edit"));
+    const input = screen.getByPlaceholderText("Company Name");
+    fireEvent.change(input, { target: { value: "Ryanair" } });
+    fireEvent.click(screen.getByText("Update"));
+
+    await waitFor(() => expect(axios.put).toHaveBeenCalledTimes(1));
+  });
+  
   test("deletes an airline", async () => {
     axios.get.mockResolvedValue({ data: [{ id: 1, company_name: "Ryanair" }] });
     axios.delete.mockResolvedValue({});
