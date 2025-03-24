@@ -71,6 +71,19 @@ Runs on: http://localhost:5000
     npm start
 Runs on: http://localhost:3000
 
+## Testing
+### run backend tests
+* Note: passes if no records exist
+  
+    cd backend
+    python unit_tests.py
+
+### run frontend tests
+
+    cd backend
+    npx jest
+
+
 ## 💾 Data Handling
 * All records are stored in SQLite
 * On every add/update/delete, the entire data is synced to data.json
