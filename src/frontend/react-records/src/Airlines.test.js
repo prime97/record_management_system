@@ -18,11 +18,41 @@ describe("Airlines Component", () => {
       render(<Airlines />);
     });
 
+    fireEvent.change(screen.getByPlaceholderText("Search by company name"), {
+      target: { value: "Ryanair" }
+    });
+
     await waitFor(() => {
       expect(screen.getByText("Ryanair")).toBeInTheDocument();
     });
 
     expect(axios.get).toHaveBeenCalledWith("http://localhost:5000/airlines");
+  });
+
+  test("search filters flights correctly", async () => {
+    axios.get.mockResolvedValueOnce({ data: [
+      { id: 1, company_name: "Ryanair"},
+      { id: 2, company_name: "JetBlue" }
+    ]});
+
+    await act(async () => {
+      render(<Airlines />);
+    });
+
+    fireEvent.change(screen.getByPlaceholderText("Search by company name"), {
+      target: { value: "Ryanair" }
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("Ryanair")).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByPlaceholderText("Search by company name"), {
+      target: { value: "JetBlue" }
+    });
+
+    expect(screen.queryByText("Ryanair")).not.toBeInTheDocument();
+    expect(screen.getByText("JetBlue")).toBeInTheDocument();
   });
 
   test("adds a new airline", async () => {
@@ -33,13 +63,17 @@ describe("Airlines Component", () => {
       render(<Airlines />);
     });
 
-    const input = screen.getByPlaceholderText(/Company Name/i);
-    const addButton = screen.getByText(/Add Airline/i);
+    const input = screen.getByPlaceholderText(/Company Name/);
+    const addButton = screen.getByText("Add");
 
     fireEvent.change(input, { target: { value: "JetBlue" } });
     fireEvent.click(addButton);
 
     axios.get.mockResolvedValueOnce({ data: [{ id: 2, company_name: "JetBlue" }] }); // Updated list after adding
+
+    fireEvent.change(screen.getByPlaceholderText("Search by company name"), {
+      target: { value: "JetBlue" }
+    });
 
     await waitFor(() => {
       expect(screen.getByText("JetBlue")).toBeInTheDocument();
@@ -52,6 +86,10 @@ describe("Airlines Component", () => {
     axios.get.mockResolvedValue({ data: [{ id: 3, company_name: "Wizz Air" }] });
     axios.put.mockResolvedValue({});
     render(<Airlines />);
+
+    fireEvent.change(screen.getByPlaceholderText("Search by company name"), {
+      target: { value: "Wizz Air" }
+    });
 
     await waitFor(() => expect(screen.getByText("Wizz Air")).toBeInTheDocument());
     fireEvent.click(screen.getByText("Edit"));
@@ -70,6 +108,10 @@ describe("Airlines Component", () => {
       render(<Airlines />);
     });
 
+    fireEvent.change(screen.getByPlaceholderText("Search by company name"), {
+      target: { value: "Ryanair" }
+    });
+
     await waitFor(() => {
       expect(screen.getByText("Ryanair")).toBeInTheDocument();
     });
@@ -78,6 +120,10 @@ describe("Airlines Component", () => {
     fireEvent.click(deleteButton);
 
     axios.get.mockResolvedValueOnce({ data: [] });
+
+    fireEvent.change(screen.getByPlaceholderText("Search by company name"), {
+      target: { value: "Ryanair" }
+    });
 
     await waitFor(() => {
       expect(screen.queryByText("Ryanair")).not.toBeInTheDocument();
@@ -89,7 +135,7 @@ describe("Airlines Component", () => {
   test("renders Airlines component correctly", () => {
     render(<Airlines />);
     expect(screen.getByText(/Airlines/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Company Name/i)).toBeInTheDocument();
-    expect(screen.getByText(/Add Airline/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Company Name/)).toBeInTheDocument();
+    expect(screen.getByText("Add")).toBeInTheDocument();
   });
 });
