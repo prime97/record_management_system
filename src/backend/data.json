@@ -73,6 +73,11 @@
             "id": 5,
             "company_name": "British Airways",
             "type": "Airline"
+        },
+        {
+            "id": 6,
+            "company_name": "Test Airline",
+            "type": "Airline"
         }
     ],
     "flights": [

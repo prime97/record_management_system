@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField,Stack } from "@mui/material";
 import "./App.css";
 
 function Airlines() {
@@ -60,7 +60,7 @@ function Airlines() {
   );
 
   return (
-    <div id='input-field'>
+    <div id='input-field' >
       <h3>Airlines</h3>
 
       {/* Search */}

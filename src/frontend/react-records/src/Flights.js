@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, TextField,Select, MenuItem, FormControl, InputLabel, Paper, Box, Typography,Stack } from "@mui/material";
+import { Button, TextField, Select, MenuItem, FormControl, InputLabel, Paper, Box, Typography, Stack } from "@mui/material";
 import "./App.css"
 
 function Flights() {
@@ -126,8 +126,10 @@ function Flights() {
         <h4>{selectedFlightId ? "Update Flight" : "Add Flight"}</h4>
 
         {/* Client Dropdown */}
-        <FormControl size="small" fullWidth style={{ marginBottom: 10 }}>
-          <InputLabel id="client-label">Select Client</InputLabel>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: "center" }}>
+
+          <FormControl size="small" style={{ marginBottom: 10, width: 200 }}>
+            <InputLabel id="client-label">Select Client</InputLabel>
             <Select
               labelId="client-label"
               name="client_id"
@@ -136,80 +138,61 @@ function Flights() {
               onChange={handleChange}
               required>
               {clients.map((client) => (
-              <MenuItem
-                key={client.id}
-                value={client.id}
-                sx={{
-                  backgroundColor: 'grey',
-                  color: 'white',
-                  '&:hover': {
-                  backgroundColor: '#0692e0'
-                  }
-                }}>
-                {client.name} ({client.id})
-              </MenuItem>
+                <MenuItem
+                  key={client.id}
+                  value={client.id}
+                  sx={{
+                    backgroundColor: 'grey',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: '#0692e0'
+                    }
+                  }}>
+                  {client.name} ({client.id})
+                </MenuItem>
               ))}
             </Select>
-        </FormControl>
+          </FormControl>
 
-        {/* Airline Dropdown */}
-        <FormControl size="small" fullWidth style={{ marginBottom: 10 }}>
-          <InputLabel id="airline-label">Select Airline</InputLabel>
-          <Select
-            labelId="airline-label"
-            name="airline_id"
-            value={formData.airline_id}
-            label="Select Airline"
-            onChange={handleChange}
-            required
-          >
-            {airlines.map((airline) => (
-              <MenuItem
+          {/* Airline Dropdown */}
+          <FormControl size="small" fullWidth style={{ marginBottom: 10, width: 200 }}>
+            <InputLabel id="airline-label">Select Airline</InputLabel>
+            <Select
+              labelId="airline-label"
+              name="airline_id"
+              value={formData.airline_id}
+              label="Select Airline"
+              onChange={handleChange}
+              required
+            >
+              {airlines.map((airline) => (
+                <MenuItem
                   key={airline.id}
                   value={airline.id}
                   sx={{
                     backgroundColor: 'grey',
                     color: 'white',
                     '&:hover': {
-                    backgroundColor: '#0692e0'
-                  }
+                      backgroundColor: '#0692e0'
+                    }
                   }}>
 
-                {airline.company_name} ({airline.id})
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-<Stack direction="column" spacing={2}>
-        <TextField name="date" type="date" value={formData.date} onChange={handleChange} required size="small"/>
-        <TextField name="start_city" size="small" placeholder="Start City" value={formData.start_city} onChange={handleChange} required />
-        <TextField name="end_city" size="small"placeholder="End City" value={formData.end_city} onChange={handleChange} required />
-        <Button type="submit">{selectedFlightId ? "Update" : "Add"}</Button>
-        {selectedFlightId && <Button type="button" onClick={resetForm}>Cancel</Button>}
+                  {airline.company_name} ({airline.id})
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        <Stack direction="column" spacing={2} style={{ width: 200 }} >
+          <TextField name="date" type="date" value={formData.date} onChange={handleChange} required size="small" />
+          <TextField name="start_city" size="small" placeholder="Start City" value={formData.start_city} onChange={handleChange} required />
+          <TextField name="end_city" size="small" placeholder="End City" value={formData.end_city} onChange={handleChange} required />
+          <Button type="submit">{selectedFlightId ? "Update" : "Add"}</Button>
+          {selectedFlightId && <Button type="button" onClick={resetForm}>Cancel</Button>}
         </Stack>
+        </div>
+
       </form>
 
-{/* Show all clients */}
-<h4>Client List</h4>
-{/* <Paper elevation={2} sx={{ p: 2, mt: 4 }}>
-  <Typography variant="h6">Client List</Typography>
-  <ul>
-    {clients.map((client) => (
-      <li key={client.id}>{client.id} – {client.name}</li>
-    ))}
-  </ul>
-</Paper> */}
-
-{/* Show all airlines */}
-{/* <h4>Airline List</h4>
-<Paper elevation={2} sx={{ p: 2, mt: 2 }}>
-  <Typography variant="h6">Airline List</Typography>
-  <ul>
-    {airlines.map((airline) => (
-      <li key={airline.id}>{airline.id} – {airline.company_name}</li>
-    ))}
-  </ul>
-</Paper> */}
 
     </div>
   );
