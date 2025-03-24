@@ -183,7 +183,7 @@ function Flights() {
             </Select>
           </FormControl>
         <Stack direction="column" spacing={2} style={{ width: 200 }} >
-          <TextField name="date" type="date" value={formData.date} onChange={handleChange} required size="small" />
+          <TextField name="date" type="date" value={formData.date} onChange={handleChange} required size="small" inputRef={(input) => input && input.setAttribute("data-testid", "date-input")}/>
           <TextField name="start_city" size="small" placeholder="Start City" value={formData.start_city} onChange={handleChange} required />
           <TextField name="end_city" size="small" placeholder="End City" value={formData.end_city} onChange={handleChange} required />
           <Button type="submit">{selectedFlightId ? "Update" : "Add"}</Button>
