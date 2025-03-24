@@ -72,8 +72,8 @@ Runs on: http://localhost:5000
 Runs on: http://localhost:3000
 
 ## Testing
+* Note: Tests only work if no records exist
 ### run backend tests
-* Note: passes if no records exist
   
     cd backend
     python unit_tests.py
