@@ -94,6 +94,7 @@ function Clients() {
         placeholder="Search by Client name"
         value={searchQuery}
         onChange={handleSearchChange}
+        size="small"
       />
 
       {/* Search Results */}

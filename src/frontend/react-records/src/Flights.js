@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, TextField,Select, MenuItem, FormControl, InputLabel, Paper, Box, Typography } from "@mui/material";
+import { Button, TextField,Select, MenuItem, FormControl, InputLabel, Paper, Box, Typography,Stack } from "@mui/material";
 import "./App.css"
 
 function Flights() {
@@ -101,6 +101,7 @@ function Flights() {
         placeholder="Search by Client ID or Airline ID"
         value={searchQuery}
         onChange={handleSearchChange}
+        size="small"
       />
 
       {/* Search Results */}
@@ -125,7 +126,7 @@ function Flights() {
         <h4>{selectedFlightId ? "Update Flight" : "Add Flight"}</h4>
 
         {/* Client Dropdown */}
-        <FormControl fullWidth style={{ marginBottom: 10 }}>
+        <FormControl size="small" fullWidth style={{ marginBottom: 10 }}>
           <InputLabel id="client-label">Select Client</InputLabel>
             <Select
               labelId="client-label"
@@ -152,7 +153,7 @@ function Flights() {
         </FormControl>
 
         {/* Airline Dropdown */}
-        <FormControl fullWidth style={{ marginBottom: 10 }}>
+        <FormControl size="small" fullWidth style={{ marginBottom: 10 }}>
           <InputLabel id="airline-label">Select Airline</InputLabel>
           <Select
             labelId="airline-label"
@@ -179,27 +180,28 @@ function Flights() {
             ))}
           </Select>
         </FormControl>
-
-        <TextField name="date" type="date" value={formData.date} onChange={handleChange} required />
-        <TextField name="start_city" placeholder="Start City" value={formData.start_city} onChange={handleChange} required />
-        <TextField name="end_city" placeholder="End City" value={formData.end_city} onChange={handleChange} required />
+<Stack direction="column" spacing={2}>
+        <TextField name="date" type="date" value={formData.date} onChange={handleChange} required size="small"/>
+        <TextField name="start_city" size="small" placeholder="Start City" value={formData.start_city} onChange={handleChange} required />
+        <TextField name="end_city" size="small"placeholder="End City" value={formData.end_city} onChange={handleChange} required />
         <Button type="submit">{selectedFlightId ? "Update" : "Add"}</Button>
         {selectedFlightId && <Button type="button" onClick={resetForm}>Cancel</Button>}
+        </Stack>
       </form>
 
 {/* Show all clients */}
 <h4>Client List</h4>
-<Paper elevation={2} sx={{ p: 2, mt: 4 }}>
+{/* <Paper elevation={2} sx={{ p: 2, mt: 4 }}>
   <Typography variant="h6">Client List</Typography>
   <ul>
     {clients.map((client) => (
       <li key={client.id}>{client.id} – {client.name}</li>
     ))}
   </ul>
-</Paper>
+</Paper> */}
 
 {/* Show all airlines */}
-<h4>Airline List</h4>
+{/* <h4>Airline List</h4>
 <Paper elevation={2} sx={{ p: 2, mt: 2 }}>
   <Typography variant="h6">Airline List</Typography>
   <ul>
@@ -207,7 +209,8 @@ function Flights() {
       <li key={airline.id}>{airline.id} – {airline.company_name}</li>
     ))}
   </ul>
-</Paper>
+</Paper> */}
+
     </div>
   );
 }

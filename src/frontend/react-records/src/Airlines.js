@@ -69,6 +69,7 @@ function Airlines() {
         placeholder="Search by company name"
         value={searchQuery}
         onChange={handleSearchChange}
+        size="small"
       />
 
       {/* Search Results */}
@@ -96,6 +97,7 @@ function Airlines() {
           placeholder="Company Name"
           value={formData.company_name}
           onChange={handleChange}
+          size="small"
           required
         />
         <Button type="submit">{selectedAirlineId ? "Update" : "Add"}</Button>
