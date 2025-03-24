@@ -16,7 +16,6 @@ db = SQLAlchemy(app)
 # Data file for JSON storage
 DATA_FILE = "data.json"
 
-
 # ===================== MODELS =====================
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -40,8 +39,8 @@ class Airline(db.Model):
 
 class Flight(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
-    airline_id = db.Column(db.Integer, db.ForeignKey('airline.id'), nullable=False)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id', ondelete="CASCADE"), nullable=False)
+    airline_id = db.Column(db.Integer, db.ForeignKey('airline.id', ondelete="CASCADE"), nullable=False)
     date = db.Column(db.String(50), nullable=False)
     start_city = db.Column(db.String(50), nullable=False)
     end_city = db.Column(db.String(50), nullable=False)
@@ -120,6 +119,10 @@ def delete_client(id):
     client = Client.query.get(id)
     if not client:
         return jsonify({"message": "Client not found"}), 404
+
+    # Delete all flights associated with this client
+    Flight.query.filter_by(client_id=id).delete()
+
     db.session.delete(client)
     db.session.commit()
     save_to_json()
@@ -168,6 +171,10 @@ def delete_airline(id):
     airline = Airline.query.get(id)
     if not airline:
         return jsonify({"message": "Airline not found"}), 404
+
+    # Delete all flights associated with this airline
+    Flight.query.filter_by(airline_id=id).delete()
+
     db.session.delete(airline)
     db.session.commit()
     save_to_json()

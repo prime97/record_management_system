@@ -5,18 +5,15 @@ import "./App.css";
 
 function Airlines() {
   const [airlines, setAirlines] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState({ company_name: "" });
-  const [successMessage, setSuccessMessage] = useState("");
-  const [editingId, setEditingId] = useState(null);
+  const [selectedAirlineId, setSelectedAirlineId] = useState(null);
 
 
   useEffect(() => {
     fetchAirlines();
   }, []);
 
-  useEffect(() => {
-    console.log("editingId changed to:", editingId);
-  }, [editingId]);
 
   const fetchAirlines = async () => {
     const response = await axios.get("http://localhost:5000/airlines");
@@ -27,76 +24,83 @@ function Airlines() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleEdit = (airline) => {
-    setEditingId(airline.id);
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSelectAirline = (airline) => {
+    setSelectedAirlineId(airline.id);
     setFormData({ company_name: airline.company_name });
-    console.log(airline.id,airline.company_name)
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const { company_name } = formData;
-      if (editingId) {
-        // Update existing airline
-        await axios.put(`http://localhost:5000/airlines/${editingId}`, formData);
-        setSuccessMessage(`${company_name} updated`);
-        setEditingId(null); // Reset editing ID
-      } else {
-        // Add new airline
-        await axios.post("http://localhost:5000/airlines", formData);
-        setSuccessMessage(`${company_name} added`);
-      }
-      // await axios.post("http://localhost:5000/airlines", formData);
-      fetchAirlines();
-      setFormData({ company_name: "" });
-      // setSuccessMessage(`${company_name} added`);
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000); // Adjust the delay to erase the success 
-    } catch (error) {
-      console.error(editingId ? "Error updating airline:" : "Error adding airline:", error);
-      setSuccessMessage(editingId ? "Error updating airline" : "Error adding airline");
-        setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
+    if (selectedAirlineId) {
+      await axios.put(`http://localhost:5000/airlines/${selectedAirlineId}`, formData);
+    } else {
+      await axios.post("http://localhost:5000/airlines", formData);
     }
+    fetchAirlines();
+    resetForm();
   };
-
 
   const handleDelete = async (id) => {
     await axios.delete(`http://localhost:5000/airlines/${id}`);
     fetchAirlines();
+    resetForm();
   };
+
+  const resetForm = () => {
+    setFormData({ company_name: "" });
+    setSelectedAirlineId(null);
+  };
+
+  const filteredAirlines = airlines.filter((airline) =>
+    airline.company_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div id='input-field'>
       <h3>Airlines</h3>
+
+      {/* Search */}
+      <TextField
+        type="text"
+        placeholder="Search by company name"
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
+
+      {/* Search Results */}
+      {searchQuery && (
+        filteredAirlines.length > 0 ? (
+          <ul>
+            {filteredAirlines.map((airline) => (
+              <li key={airline.id}>
+                {airline.company_name}
+                <Button onClick={() => handleSelectAirline(airline)}>Edit</Button>
+                <Button onClick={() => handleDelete(airline.id)}>Delete</Button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Airline not found!</p>
+        )
+      )}
+
+      {/* Add or Update Form */}
       <form onSubmit={handleSubmit}>
-        <TextField variant="standard" type="text" name="company_name" placeholder="Company Name" onChange={handleChange} value={formData.company_name}
-          required />
-        {/* <Button variant="text" type="submit">Add Airline</Button> */}
-        <Button variant="text" type="submit">
-  {editingId ? "Update" : "Add Airline"}
-</Button>
-{editingId && (
-          <Button onClick={() => { setEditingId(null); setFormData({ company_name: "" }); }}>
-            Cancel
-          </Button>
-        )}
+        <h4>{selectedAirlineId ? "Update Airline" : "Add Airline"}</h4>
+        <TextField
+          name="company_name"
+          placeholder="Company Name"
+          value={formData.company_name}
+          onChange={handleChange}
+          required
+        />
+        <Button type="submit">{selectedAirlineId ? "Update" : "Add"}</Button>
+        {selectedAirlineId && <Button type="button" onClick={resetForm}>Cancel</Button>}
       </form>
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-
-      <ul>
-        {airlines.map((airline) => (
-          <li key={airline.id}>
-            {airline.company_name}
-            <Button color="error" onClick={() => handleDelete(airline.id)}>Delete</Button>
-            <Button color="success" onClick={() => handleEdit(airline)}>Edit</Button>
-
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

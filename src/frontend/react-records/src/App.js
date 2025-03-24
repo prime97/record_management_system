@@ -25,16 +25,6 @@ function App() {
       <Paper elevation={20} sx={{ padding: '20px', maxWidth: '500px',  margin: '20px auto' ,marginTop:'50px'}}>
         <div id='main'>
           <h1>Record Management System</h1>
-          <TextField
-            variant="outlined"
-            label="Search"
-            size="small"
-            placeholder="Search Records..."
-            value={searchQuery}
-            fullWidth
-            onChange={handleSearchChange}
-            margin="normal" // Add some spacing around the TextField
-          />
 
           <nav id="buttons">
             {/* <ul> */}

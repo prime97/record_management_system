@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {Button,TextField,Box} from "@mui/material";
+import {Button, TextField, Box, colors} from "@mui/material";
 import "./App.css";
-// import './Client.css';
 
 function Clients() {
   const [clients, setClients] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     address_line_1: "",
@@ -17,7 +17,8 @@ function Clients() {
     country: "",
     phone_number: ""
   });
-  const [successMessage, setSuccessMessage] = useState("");
+  const [selectedClientId, setSelectedClientId] = useState(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   useEffect(() => {
     fetchClients();
@@ -32,52 +33,85 @@ function Clients() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   await axios.post("http://localhost:5000/clients", formData);
-  //   fetchClients();
-  // };
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSelectClient = (client) => {
+    setSelectedClientId(client.id);
+    setFormData(client);
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const { name } = formData;
+    if (selectedClientId) {
+      await axios.put(`http://localhost:5000/clients/${selectedClientId}`, formData);
+    } else {
       await axios.post("http://localhost:5000/clients", formData);
-      fetchClients();
-      setFormData({
-        name: "",
-        address_line_1: "",
-        address_line_2: "",
-        address_line_3: "",
-        city: "",
-        state: "",
-        zip_code: "",
-        country: "",
-        phone_number: ""
-      });
-      setSuccessMessage(`${name} added`);
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
-    } catch (error) {
-      console.error("Error adding client:", error);
-      setSuccessMessage("Error adding client");
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
     }
+    fetchClients();
+    resetForm();
   };
-
 
   const handleDelete = async (id) => {
     await axios.delete(`http://localhost:5000/clients/${id}`);
     fetchClients();
+    resetForm();
   };
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      address_line_1: "",
+      address_line_2: "",
+      address_line_3: "",
+      city: "",
+      state: "",
+      zip_code: "",
+      country: "",
+      phone_number: ""
+    });
+    setSelectedClientId(null);
+    setSearchQuery("");
+    setHasSearched(false);
+  };
+
+  const filteredClients = clients.filter((client) =>
+    client.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+
 
   return (
 
     <div id="input-field">
       <h3>Clients</h3>
+
+      {/* Search Input */}
+      <TextField
+        type="text"
+        placeholder="Search by Client name"
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
+
+      {/* Search Results */}
+      {searchQuery && (
+        filteredClients.length > 0 ? (
+          <ul>
+            {filteredClients.map((client) => (
+              <li key={client.id}>
+                {client.name} - {client.phone_number}
+                  <Button onClick={() => handleSelectClient(client)}>Edit</Button>
+                  <Button onClick={() => handleDelete(client.id)}>Delete</Button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Client not found!</p>
+        )
+      )}
      
       <form onSubmit={handleSubmit}   style={{
                     width: '80%',
@@ -86,8 +120,10 @@ function Clients() {
                     flexDirection: 'column', // Stack items vertically
                     alignItems: 'center',   // Center items horizontally
                     margin: '0 auto', 
-                    gap:'7px'
+                    gap:'7px',
+                    button: colors
                 }}>
+        <h4>{selectedClientId ? "Update Client" : "Add Client"}</h4>
         <TextField value={formData.name} variant="standard" type="text" name="name" placeholder="Name"  onChange={handleChange} required />
         <TextField value={formData.address_line_1} variant="standard" type="text" name="address_line_1" placeholder="Address Line 1" onChange={handleChange} required />
         <TextField value={formData.address_line_2} variant="standard" type="text" name="address_line_2" placeholder="Address Line 2" onChange={handleChange} />
@@ -97,18 +133,9 @@ function Clients() {
         <TextField value={formData.zip_code} variant="standard" type="text" name="zip_code" placeholder="Zip Code" onChange={handleChange} required />
         <TextField value={formData.country} variant="standard" type="text" name="country" placeholder="Country" onChange={handleChange} required />
         <TextField value={formData.phone_number} variant="standard" type="text" name="phone_number" placeholder="Phone Number" onChange={handleChange} required />
-        <Button variant="text" type="submit">Add Client</Button>
+        <Button type="submit">{selectedClientId ? "Update" : "Add"}</Button>
+        {selectedClientId && <Button type="button" onClick={resetForm}>Cancel</Button>}
       </form>
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-
-      <ul>
-        {clients.map((client) => (
-          <li key={client.id}>
-            {client.name} - {client.city}
-            <Button color="error" onClick={() => handleDelete(client.id)}>Delete</Button>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
